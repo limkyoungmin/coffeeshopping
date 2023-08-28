@@ -85,7 +85,7 @@ $(document).ready(function() {
  	// 결제
  	function iamport() {
     var IMP = window.IMP;
-    IMP.init("imp75540126");
+    IMP.init("imp74386531");
 
     IMP.request_pay(
         {
