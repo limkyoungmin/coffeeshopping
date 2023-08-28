@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.novocozy.mappers.UserMapper">
+
+<!-- 회원가입 -->
+<insert id="userjoin">
+INSERT INTO users(users_id,users_passwd,users_name,users_date,users_birthday,users_email,users_email_yn,users_email_code,users_phone,users_yn,users_zonecode,users_address,users_addressdetail) VALUES(#{users_id},#{users_passwd},#{users_name},sysdate, TO_CHAR(TO_DATE(#{users_birthday}, 'YYYYMMDD'), 'YYYY-MM-DD'),#{users_email},0,#{users_email_code},#{users_phone},'N',#{users_zonecode},#{users_address},#{users_addressdetail})
+</insert>
+
+<!-- 회원가입 인증 코드 부여 -->
+<update id="updatemailcode" parameterType="com.novocozy.domain.UserVO">
+UPDATE users SET users_email_code=#{users_email_code} WHERE users_email=#{users_email} and users_id=#{users_id}
+</update>
+
+<!-- 인증 완료 될 경우 이메일 인증여부(email_yn) 업데이트 -->
+<update id="updatemailyn" parameterType="com.novocozy.domain.UserVO">
+UPDATE users SET users_email_yn=1 WHERE users_email=#{users_email} and users_email_code=#{users_email_code}
+</update>
+
+<!-- 실패했을경우 막기 필요한가? 필요없는거 같은데-->
+<select id="emailynFail" parameterType="String" resultType="int">
+SELECT count(*) FROM users WHERE users_id=#{users_id} and users_email_yn=1 
+</select>
+
+<!-- 아이디 중복검사 -->
+<select id="idCheck" resultType="int">
+SELECT count(*) FROM users WHERE users_id=#{users_id}
+</select>
+
+<!-- 회원정보 상세보기(개인정보 수정) -->
+<select id="userView" resultType="com.novocozy.domain.UserVO">
+SELECT users_id,users_passwd,users_name,users_phone,users_email,users_birthday,users_date,users_zonecode,users_address,users_addressdetail FROM users WHERE users_id=#{users_id}
+</select>
+
+<!-- 비밀번호 검사 -->
+<select id="pwCheck" resultType="String">
+SELECT users_passwd FROM users WHERE users_id=#{users_id}
+</select>
+
+<!-- 회원정보수정 -->
+<update id="updateInfo" parameterType="com.novocozy.domain.UserVO">
+UPDATE users SET users_id=#{users_id},users_passwd=#{users_passwd},users_name=#{users_name},users_phone=#{users_phone},users_birthday=TO_CHAR(TO_DATE(#{users_birthday}, 'YYYYMMDD'), 'YYYY-MM-DD'),users_zonecode=#{users_zonecode},users_address=#{users_address},users_addressdetail=#{users_addressdetail} WHERE users_id=#{users_id}
+</update>
+
+<!-- 아이디 찾기 핸드폰-->
+<select id="findIdP" resultType="com.novocozy.domain.UserVO">
+SELECT * FROM users WHERE users_name=#{users_name} AND users_phone=#{users_phone}
+</select>
+
+<!-- 아이디 찾기 이메일-->
+<select id="findIdE" resultType="com.novocozy.domain.UserVO">
+SELECT * FROM users WHERE users_name=#{users_name} AND users_email=#{users_email}
+</select>
+
+<!-- 비밀번호 재설정 정보확인 -->
+<select id="resetPwChk" resultType="int">
+SELECT count(*) FROM users WHERE users_id=#{users_id} AND users_email=#{users_email}
+</select> 
+
+<!-- 비밀번호 변경 -->
+<update id="updatePw" parameterType="Map">
+UPDATE users SET users_passwd=#{users_passwd} WHERE users_id=#{users_id} AND users_email=#{users_email}
+</update>
+
+<!-- 회원 탈퇴 처리 -->
+<update id="deleteUser" parameterType="com.novocozy.domain.UserVO">
+UPDATE users SET users_yn='Y' WHERE users_id=#{users_id}
+</update>
+
+<!-- 추가 -->
+<select id="getUserInfo" resultType="com.novocozy.domain.UserVO">
+SELECT users_id, users_name, users_phone, users_email, users_zonecode, users_address, users_addressdetail FROM users WHERE users_id = #{users_id}
+</select>
+</mapper>

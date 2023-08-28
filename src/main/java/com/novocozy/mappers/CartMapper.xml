@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.novocozy.mappers.CartMapper">
+
+<insert id="cartInsert">
+INSERT INTO CART (cart_num,product_num,cart_date,users_id,product_count) VALUES(cart_seq.NEXTVAL,#{product_num},sysdate ,#{users_id},#{product_count})
+</insert>
+    
+<select id="cartCheck" resultType="int">
+SELECT count(*) FROM cart WHERE product_num =#{product_num}
+</select>
+
+<select id="cartMemCheck" resultType="int">
+SELECT count(*) FROM cart WHERE users_id = #{users_id} AND product_num =#{product_num}
+</select>
+
+<select id="cartList" resultMap="CartVO">
+SELECT a.cart_num, a.product_count, b.product_num, b.product_name, b.product_price, c.img_url
+FROM cart a
+LEFT OUTER JOIN product b ON a.product_num = b.product_num
+LEFT OUTER JOIN product_img c ON b.product_num = c.product_num
+WHERE a.users_id = #{users_id}
+</select>
+    
+<resultMap type="com.novocozy.domain.CartVO" id="CartVO">
+<result column="cart_num" property="cart_num" />
+<result column="users_id" property="users_id" />
+<result column="product_num" property="product_num" />
+<result column="product_count" property="product_count" />
+<collection property="productVO" resultMap="ProductVO"></collection>
+<collection property="imgList" resultMap="imgList"></collection>
+</resultMap>
+    
+<resultMap type="com.novocozy.domain.ProductVO" id="ProductVO">
+<result column="product_num" property="product_num" />
+<result column="product_name" property="product_name" />
+<result column="product_price" property="product_price" />
+<result column="product_stock" property="product_stock" />
+<result column="product_date" property="product_date" />
+<result column="product_deleted" property="product_deleted" />
+<result column="product_cate" property="product_cate" />
+<result column="product_content" property="product_content" />
+</resultMap> 
+
+<resultMap type="com.novocozy.domain.ProductImgVO" id="imgList">
+<result property="img_num" column="img_num"/>
+<result property="img_name" column="img_name"/>
+<result property="img_url" column="img_url"/>   
+</resultMap>
+    
+<!-- 삭제 -->
+<delete id="cartDelete">
+DELETE FROM cart WHERE cart_num = #{cart_num}
+</delete>
+
+<!-- 전체 삭제 -->
+<delete id="cartDeleteAll">
+DELETE FROM cart WHERE users_id = #{users_id}
+</delete>
+
+<!-- 카트에서 수량 재 업데이트-->
+<update id="countUpdate" parameterType="java.util.Map">   
+UPDATE cart SET product_count=#{product_count} WHERE cart_num =#{cart_num}
+</update>
+
+</mapper>

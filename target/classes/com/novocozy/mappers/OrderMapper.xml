@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.novocozy.mappers.OrderMapper">
+
+<insert id="insertOrder">
+INSERT INTO orders(order_num,users_id,order_date,order_name,order_zonecode
+,order_address,order_addressdetail,order_phone,order_deliverymsg,order_buyer_name
+,order_buyer_phone,order_buyer_email) VALUES(#{order_num},#{users_id},sysdate,#{order_name},#{order_zonecode}
+,#{order_address},#{order_addressdetail},#{order_phone},#{order_deliverymsg},#{order_buyer_name}
+,#{order_buyer_phone},#{order_buyer_email})
+</insert>
+
+<insert id="insertOrderDetail">
+INSERT INTO orders_detail(order_detail_num,order_num,product_num,product_name,product_count,product_price,refund_yn) 
+VALUES((SELECT NVL(MAX(order_detail_num), 0) + 1 FROM orders_detail),#{order_num},#{product_num}
+,#{product_name},#{product_count},#{product_price},'N')
+</insert>
+
+<delete id="resetCart">
+DELETE FROM cart WHERE users_id = #{users_id}
+</delete>
+
+</mapper>

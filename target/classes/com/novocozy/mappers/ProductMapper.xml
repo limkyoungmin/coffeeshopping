@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.novocozy.mappers.ProductMapper">
+	
+	<resultMap type="com.novocozy.domain.ProductVO" id="productDetailMap">
+	    <id property="product_num" column="product_num" />
+	    <result property="product_cate" column="product_cate" />
+	    <result property="product_name" column="product_name" />
+	    <result property="product_price" column="product_price" />
+	    <result property="product_stock" column="product_stock" />
+	    <result property="product_content" column="product_content" />
+	    <result property="product_date" column="product_date" />
+	    <collection property="imgList" ofType="com.novocozy.domain.ProductImgVO">
+	        <id property="img_num" column="img_num"/>
+	        <result property="img_name" column="img_name"/>
+	        <result property="img_url" column="img_url"/>
+	    </collection>
+	</resultMap>
+	
+    <!-- 관리자 상품 등록 -->
+    <insert id="insertProduct" parameterType="com.novocozy.domain.ProductVO">
+       	<selectKey resultType="int" keyProperty="product_num" order="AFTER">
+	    		SELECT seq_product.CURRVAL
+	    		FROM DUAL
+    		</selectKey>
+        INSERT INTO product (product_num, product_name, product_price, product_stock, product_cate, product_date, product_deleted, product_content)
+        VALUES (seq_product.NEXTVAL, #{product_name}, #{product_price}, #{product_stock}, #{product_cate}, sysdate, 'N', #{product_content})
+    </insert>
+    
+    <!-- 관리자 상품 이미지 등록 -->
+    <insert id="productImgWrite" parameterType="com.novocozy.domain.ProductImgVO">
+        INSERT INTO product_img (img_num, product_num, img_name, img_url)	
+        VALUES (seq_product_img.NEXTVAL, #{product_num}, #{img_name}, #{img_url})
+    </insert>
+    
+    <!-- 관리자 상품 리스트 -->
+	<select id = "countList" resultType="int">
+	<![CDATA[
+	    SELECT COUNT(product_num)
+	    FROM product
+	    WHERE product_num > 0
+	    ]]>
+	</select>
+	  
+	<select id="productList" resultType="com.novocozy.domain.ProductVO">
+		SELECT * FROM (
+			SELECT
+				rownum rnum,
+			    product_num,
+			    product_name,
+			    product_cate,
+			    product_price,
+			    product_deleted
+			FROM (
+			    SELECT
+			        product_num,
+			        product_name,
+			        product_cate,
+			        product_price,
+			        product_deleted
+			        FROM product
+			        ORDER BY product_num DESC
+			)
+		) WHERE rnum BETWEEN #{offset} + 1 AND #{offset} + #{pageSize}
+	</select>
+	
+	<!-- 관리자 상품 상세 -->
+	<select id="productDetail" parameterType="int" resultMap="productDetailMap">
+	    SELECT p.product_num, p.product_cate, p.product_name, p.product_price, p.product_stock, p.product_content, p.product_date, i.img_num, i.img_name, i.img_url
+		FROM product p
+		LEFT OUTER JOIN product_img i 
+		ON p.product_num = i.product_num
+		WHERE p.product_num = #{product_num}
+	</select>
+	
+	<!-- 관리자 상품 수정 -->
+	<update id="productUpdate" parameterType="com.novocozy.domain.ProductVO">
+	    UPDATE product
+	    SET
+	    product_name=#{product_name}, product_price=#{product_price}, product_stock=#{product_stock},
+	    product_content=#{product_content}, product_deleted=#{product_deleted}
+	    WHERE product_num=#{product_num}
+	</update>
+	
+	<!-- 관리자 상품 이미지 삭제 -->
+	<delete id="deleteProductImages" parameterType="int">
+	    DELETE FROM product_img
+	    WHERE product_num=#{product_num}
+	</delete>
+	
+	<!-- 관리자 상품 삭제 -->
+	<update id="productDelete" parameterType="com.novocozy.domain.ProductVO">
+		UPDATE product
+		SET
+		product_deleted='Y'
+		WHERE product_num=#{product_num}
+	</update>
+	
+	<!-- 메인페이지 상품 리스트(커피) -->
+	<select id="productCoffeeList" resultMap="productDetailMap">
+		SELECT p.product_num, p.product_name, p.product_price, p.product_content, p.product_date, p.product_deleted, i.img_num, i.img_url
+		FROM product p
+		LEFT OUTER JOIN product_img i
+		ON p.product_num = i.product_num
+		WHERE p.product_cate = '커피' AND p.product_deleted = 'N'
+		ORDER BY p.product_num DESC
+	</select>
+	
+	<!-- 메인페이지 상품 리스트(푸드) -->
+	<select id="productFoodList" resultMap="productDetailMap">
+		SELECT p.product_num, p.product_name, p.product_price, p.product_content, p.product_date, p.product_deleted, i.img_num, i.img_url
+		FROM product p
+		LEFT OUTER JOIN product_img i
+		ON p.product_num = i.product_num
+		WHERE p.product_cate = '푸드' AND p.product_deleted = 'N'
+		ORDER BY p.product_num DESC
+	</select>
+	
+	<!-- 메인페이지 상품 리스트(굿즈) -->
+	<select id="productGoodsList" resultMap="productDetailMap">
+		SELECT p.product_num, p.product_name, p.product_price, p.product_content, p.product_date, p.product_deleted, i.img_num, i.img_url
+		FROM product p
+		LEFT OUTER JOIN product_img i
+		ON p.product_num = i.product_num
+		WHERE p.product_cate = '굿즈' AND p.product_deleted = 'N'
+		ORDER BY p.product_num DESC
+	</select>
+	
+	<!-- 메인페이지 상품 리스트(머신) -->
+	<select id="productMachineList" resultMap="productDetailMap">
+		SELECT p.product_num, p.product_name, p.product_price, p.product_content, p.product_date, p.product_deleted, i.img_num, i.img_url
+		FROM product p
+		LEFT OUTER JOIN product_img i
+		ON p.product_num = i.product_num
+		WHERE p.product_cate = '머신' AND p.product_deleted = 'N'
+		ORDER BY p.product_num DESC
+	</select>
+</mapper>
