@@ -32,7 +32,7 @@
 	   <!-- uploadRealPath -->
    <beans:bean class="java.lang.String" id="uploadPath">
    		<!-- <beans:constructor-arg value="C:/0.develop/workspace sts3/novocozy/src/main/webapp/resources" /> -->
-		<beans:constructor-arg value="C:/webtest/sts-3.9.18.RELEASE/workspace/novocozy/src/main/webapp/resources" />
+		<beans:constructor-arg value="C:/Users/KITCOOP/git/coffeeshopping/src/main/webapp/resources" />
    </beans:bean>
 	
 	<beans:bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">

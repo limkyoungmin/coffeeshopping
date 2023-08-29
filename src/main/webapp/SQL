@@ -1,0 +1,11 @@
+SELECT 
+    a.order_num, a.users_id, a.order_date,
+    b.order_detail_num, b.order_num, b.product_num, b.product_name, b.product_count, b.product_price, b.refund_yn,
+    c.img_num, c.product_num, c.img_url
+FROM orders a
+LEFT OUTER JOIN orders_detail b ON b.order_num = a.order_num
+LEFT OUTER JOIN product_img c ON c.product_num = b.product_num
+WHERE a.users_id = 'test'
+ORDER BY b.order_detail_num DESC
+
+b.order_detail_num 을 날짜별로 출력 하려면 초단위까지 계산해야됨

@@ -80,20 +80,42 @@ $(document).ready(function() {
     }
     
     $("#orderButton").click(orderAdd);
- 	
+ 
+ 	// 결제방법 선택
+ 	function orderCheckCode() {
+ 		$('#kakaopay').change(function () {
+            if ($(this).prop('checked')) {
+                $('#inicis').prop('checked', false);
+            }
+        });
+
+        $('#inicis').change(function () {
+            if ($(this).prop('checked')) {
+                $('#kakaopay').prop('checked', false);
+            }
+        });
+ 	}
+ 	orderCheckCode();
 
  	// 결제
  	function iamport() {
     var IMP = window.IMP;
     IMP.init("imp74386531");
-
+    
+    var selectorder = null;
+	if($('#kakaopay').prop('checked')){
+		selectorder = "kakaopay";
+	} else if($('#inicis').prop('checked')){
+		selectorder = "html5_inicis";
+	}
+    
     IMP.request_pay(
         {
-        	pg : 'html5_inicis',
+        	pg : selectorder,
             pay_method: "card",
             merchant_uid: 'merchant_' + new Date().getTime(),
             name: "NOVOCOZY 상품결제",
-            amount: parseInt($("#LastTotalPrice").text().replace(/[^0-9]/g, "")),
+            amount: 100,/* parseInt($("#LastTotalPrice").text().replace(/[^0-9]/g, "")), */
             buyer_email: $("#buyerEmail").val(),
             buyer_name: $("#buyerName").val(),
             buyer_tel: $("#buyerPhone").val(),
@@ -104,10 +126,10 @@ $(document).ready(function() {
             if (rsp.success) {
                 console.log(rsp);
              var msg = '결제가 완료되었습니다. 감사합니다 :)'
-          /*   msg += '고유ID : ' + rsp.imp_uid;
-            msg += '상점 거래ID : ' + rsp.merchant_uid;
-            msg += '결제 금액 : ' + rsp.paid_amount;
-            msg += '카드 승인번호 : ' + rsp.apply_num;  */
+             /*msg += '고유ID : ' + rsp.imp_uid;
+             msg += '상점 거래ID : ' + rsp.merchant_uid;
+             msg += '결제 금액 : ' + rsp.paid_amount;
+             msg += '카드 승인번호 : ' + rsp.apply_num; */
             
             $("#merchant_uid").val(parseInt(rsp.merchant_uid));
             
@@ -166,27 +188,28 @@ $(document).ready(function() {
  	        }
  	    });
  	}
+
 });
  	
-    function findPostCode() {
-        new daum.Postcode({
-            oncomplete : function(data) {
-                var oldAddress = data.jibunAddress.length > 0 ? data.jibunAddress : data.autoJibunAddress;
-                var zonecode = data.zonecode;
-                var roadAddress = data.roadAddress.length > 0 ? data.roadAddress : data.autoRoadAddress;
-                var buildingCode = data.buildingCode;
-                var postcode = data.postcode;
+function findPostCode() {
+    new daum.Postcode({
+        oncomplete : function(data) {
+            var oldAddress = data.jibunAddress.length > 0 ? data.jibunAddress : data.autoJibunAddress;
+            var zonecode = data.zonecode;
+            var roadAddress = data.roadAddress.length > 0 ? data.roadAddress : data.autoRoadAddress;
+            var buildingCode = data.buildingCode;
+            var postcode = data.postcode;
 
-                $("#zonecode").val(zonecode);
-                $("#oldAddress").val(oldAddress);
-                $("#address").val(roadAddress);
-                $("#postCode").val(postcode);
-                $("#addressdetail").val("").focus();
-                $("#buildingCode").val(buildingCode);
+            $("#zonecode").val(zonecode);
+            $("#oldAddress").val(oldAddress);
+            $("#address").val(roadAddress);
+            $("#postCode").val(postcode);
+            $("#addressdetail").val("").focus();
+            $("#buildingCode").val(buildingCode);
 
-            }
-        }).open();
-    }
+        }
+    }).open();
+}
     
     
 </script>
@@ -341,6 +364,17 @@ $(document).ready(function() {
             <!-- 주문하기 -->
             <div class="btn btnOrder">
                 <a href="javascript:void(0);" id="orderButton" class="btnStyle-2">결제하기</a>
+            </div>
+            <div class="agreeArea">
+                <div class="check">
+                    <input type="checkbox" name="kakaopay" id="kakaopay">
+                    <label for="kakaopay">카카오페이</label>
+                </div>
+                <div class="check">
+                    <input type="checkbox" name="inicis" id="inicis">
+                    <label for="inicis">KG이니시스</label>
+                </div>
+                <p class="block">원하시는 결제 수단을 선택해 주세요.</p>
             </div>
             <!-- //주문하기 -->
             <div class="agreeArea">

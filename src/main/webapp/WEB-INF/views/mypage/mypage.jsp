@@ -81,7 +81,7 @@
 						<a href="#" class="iconS"> 쿠폰 <em class="number">0장</em></a>
 					</div>
 					<div class="innerBox order">
-						<a href="OrderList.jsp" class="iconS"> 주문/배송 <em class="number">0건</em></a>
+						<a href="/mypage/orderList" class="iconS"> 주문/배송 <em class="number">0건</em></a>
 					</div>
 					<div class="innerBox qna">
 						<a href="MypageQna.jspt" class="iconS"> 1:1문의 <em class="number">0건</em></a>
@@ -93,7 +93,7 @@
 				<div class="userMenu togType2">
 					<strong class="menuTit"><a href="Mypage.jsp">마이페이지</a></strong>
 					<ul class="depth1">
-						<li class=""><a href="OrderList.jsp">주문/배송내역</a></li>
+						<li class=""><a href="/mypage/orderlist">주문/배송내역</a></li>
 						<li class=""><a href="ReturnList.jsp">반품/교환내역</a></li>
 						<li class=""><a href="AddressMg.jsp">배송지 관리</a></li>
 						<li class=""><a href="#">적립금 내역</a></li>
