@@ -93,12 +93,12 @@
 				<div class="userMenu togType2">
 					<strong class="menuTit"><a href="Mypage.jsp">마이페이지</a></strong>
 					<ul class="depth1">
-						<li class=""><a href="OrderList.jsp">주문/배송내역</a></li>
+						<li class=""><a href="/mypage/orderlist">주문/배송내역</a></li>
 						<li class=""><a href="ReturnList.jsp">반품/교환내역</a></li>
 						<li class=""><a href="AddressMg.jsp">배송지 관리</a></li>
 						<li class=""><a href="#">적립금 내역</a></li>
 						<li class=""><a href="MyWrite.jsp">작성한 글</a></li>
-						<li class=""><a href="EditInfo.jsp">개인정보 수정</a></li>
+						<li class=""><a href="/mypage/editinfo">개인정보 수정</a></li>
 					</ul>
 				</div>
 				<!-- 컨텐츠 -->
