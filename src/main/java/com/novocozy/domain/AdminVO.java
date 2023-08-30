@@ -24,10 +24,4 @@ public class AdminVO {
 	public void setAdmin_name(String admin_name) {
 		this.admin_name = admin_name;
 	}
-	
-	@Override
-	public String toString() {
-		return "AdminVO [admin_id=" + admin_id + ", admin_passwd=" + admin_passwd
-				+ ", admin_name=" + admin_name +"]";
-	}
 }

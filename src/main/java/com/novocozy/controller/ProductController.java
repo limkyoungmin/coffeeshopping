@@ -143,7 +143,7 @@ public class ProductController {
 	}
 	
 	
-	@RequestMapping(value = "productmaindetail", method = RequestMethod.GET)
+	@RequestMapping(value = "/productmaindetail", method = RequestMethod.GET)
 	public String productMainDetail(Model model, @RequestParam("product_num") int product_num) throws Exception { 
 	ProductVO detail = productService.productDetail(product_num);
 	model.addAttribute("productmaindetail", detail);

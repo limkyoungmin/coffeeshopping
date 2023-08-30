@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@include file="../template/header.jsp"%>
-
 <script type="text/javascript">
     var intervalId;
     var pattern1 = /[0-9]/g;
@@ -304,27 +304,33 @@ function addQna() {
 				<p class="text">최근 주문 내역이 없습니다.</p>
 			</div>       
         <div class="orderList"><!-- //주문 내역 있을 때 -->
-            <ul class="cartList" id="orderList">
-            
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        var totalPages = '0';
-        $("#totalPages").val('0');
-    })
-</script>
-
-        <div class="noHistory">
-            <p class="text">최근 주문 내역이 없습니다.</p>
-        </div>
-    
-</ul>
-        </div>
-        <!-- //주문 내역 있을 때 -->
-    </div>
-    <!-- //주문/배송 내역 -->
+			<table>
+		        <thead>
+		            <tr class="cartList">
+		                <td style="text-align:center;">주문날짜</td>
+		                <td style="text-align:center;">배송상태</td>
+		                <td style="text-align:center;">제품사진</td>
+		                <td style="text-align:center;">제품명</td>
+		                <td style="text-align:center;">제품가격</td>
+		                <td style="text-align:center;">교환신청</td>
+		            </tr>
+		        </thead>
+			        <tbody>
+			        <c:forEach var="orderList" items="${orderList}">
+			        	<tr>
+				            <td style="text-align:center;">${orderList.orderVO.order_date}</td>
+				            <td style="text-align:center;">${orderList.orderVO.order_request}</td>
+				            <td style="width:100px; height: 100px; text-align:center;"><a href="/productmaindetail?product_num=${orderList.product_num}"><img src="${orderList.imgList[0].img_url}" ></a></td>
+				            <td style="text-align:center;">${orderList.product_name}</td>
+				            <td style="text-align:center;">${orderList.product_price}</td>
+				            <td style="text-align:center;">교환신청</button></td>
+			            </tr>
+		            </c:forEach>
+			        </tbody>
+			</table>
+		</div>
+	</div>
 </div>
-
 <!-- 팝업::반품신청 -->
 <div id="popReturn" class="popWrap popQna popReturn"></div>
 <!-- // 팝업::반품신청 -->

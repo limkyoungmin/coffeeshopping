@@ -6,9 +6,8 @@
 	<resultMap type="com.novocozy.domain.OrderVO" id="OrderVO">
 		<result column="order_num" property="order_num"/>
 		<result column="users_id" property="users_id" />
-		<result column="order_date" property="order_name" />
-		<collection property="OrderDetailVO" resultMap="OrderDetailVO" />
-		<collection property="ProductImgVO" resultMap="ProductImgVO"/>
+		<result column="order_date" property="order_date" />
+		<result column="order_request" property="order_request" />
 	</resultMap>
 	
 	<resultMap type="com.novocozy.domain.OrderDetailVO" id="OrderDetailVO">
@@ -19,6 +18,8 @@
 		<result column="product_count" property="product_count" />
 		<result column="product_price" property="product_price" />
 		<result column="refund_yn" property="refund_yn" />
+		<collection property="orderVO" resultMap="OrderVO" />
+		<collection property="imgList" resultMap="ProductImgVO"/>
 	</resultMap>
 	
 	<resultMap type="com.novocozy.domain.ProductImgVO" id="ProductImgVO">
@@ -30,9 +31,9 @@
 	<insert id="insertOrder">
 	INSERT INTO orders(order_num,users_id,order_date,order_name,order_zonecode
 	,order_address,order_addressdetail,order_phone,order_deliverymsg,order_buyer_name
-	,order_buyer_phone,order_buyer_email) VALUES(#{order_num},#{users_id},sysdate,#{order_name},#{order_zonecode}
+	,order_buyer_phone,order_buyer_email,order_request) VALUES(#{order_num},#{users_id},sysdate,#{order_name},#{order_zonecode}
 	,#{order_address},#{order_addressdetail},#{order_phone},#{order_deliverymsg},#{order_buyer_name}
-	,#{order_buyer_phone},#{order_buyer_email})
+	,#{order_buyer_phone},#{order_buyer_email},'주문완료')
 	</insert>
 	
 	<insert id="insertOrderDetail">
@@ -45,6 +46,7 @@
 	DELETE FROM cart WHERE users_id = #{users_id}
 	</delete>
 	
+<<<<<<< HEAD
 	<select id="listOrder">
 		SELECT 
 		    a.order_num, a.users_id, a.order_date,
@@ -55,6 +57,18 @@
 		LEFT OUTER JOIN product_img c ON c.product_num = b.product_num
 		WHERE a.users_id = #{users_id}
 		ORDER BY b.order_detail_num DESC
+=======
+	<select id="listOrder" resultMap="OrderDetailVO">
+	SELECT 
+	    a.order_num, a.users_id, a.order_date, a.order_request,
+	    b.order_detail_num, b.order_num, b.product_num, b.product_name, b.product_count, b.product_price, b.refund_yn,
+	    c.img_num, c.product_num, c.img_url
+	FROM orders a
+	LEFT OUTER JOIN orders_detail b ON b.order_num = a.order_num
+	LEFT OUTER JOIN product_img c ON c.product_num = b.product_num
+	WHERE a.users_id = #{users_id}
+	ORDER BY b.order_detail_num DESC	
+>>>>>>> refs/remotes/origin/main
 	</select>
 
 </mapper>

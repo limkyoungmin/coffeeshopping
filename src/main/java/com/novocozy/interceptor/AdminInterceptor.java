@@ -21,7 +21,7 @@ public class AdminInterceptor implements HandlerInterceptor{
 		
 		HttpSession session = request.getSession();
 		AdminVO adminVo = (AdminVO)session.getAttribute("admin");
-
+		
 		String requestURI = request.getRequestURL().toString();
 		System.out.println("requestURI : " + requestURI);
 		
