@@ -41,6 +41,11 @@
 									<i class="fas fa-user text-white fa-lg mr-3"></i>Member management
 								</a>
 						    </li>
+						    <li class="nav-item">
+						    	<a href="users_delivery" class="nav-link text-white p-3 mb-2 sidebar-link">
+						    		<i class="fas fa-user text-white fa-lg mr-3"></i>Users Delivery
+						    	</a>
+						    </li>
 							<li class="nav-item">
 								<a href="product-management" class="nav-link text-white p-3 mb-2 sidebar-link">
 									<i class="fas fa-solid fa-list-check text-white fa-lg mr-3"></i>Product management

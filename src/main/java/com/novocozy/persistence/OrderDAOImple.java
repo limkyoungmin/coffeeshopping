@@ -1,5 +1,7 @@
 package com.novocozy.persistence;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
@@ -32,6 +34,11 @@ public class OrderDAOImple implements OrderDAO {
 	public void resetCart(String users_id) throws Exception {
 		// TODO Auto-generated method stub
 		session.delete(namespace+".resetCart",users_id);
+	}
+	
+	@Override
+	public List<OrderDetailVO> listOrder(String users_id) throws Exception {
+		return session.selectList(namespace + ".listOrder", users_id);
 	}
 	
 }

@@ -1,6 +1,7 @@
 package com.novocozy.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -19,7 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.novocozy.domain.OrderDetailVO;
+import com.novocozy.domain.OrderVO;
 import com.novocozy.domain.UserVO;
+import com.novocozy.service.OrderService;
 import com.novocozy.service.UserService;
 
 /**
@@ -29,10 +33,13 @@ import com.novocozy.service.UserService;
 @RequestMapping("/mypage/*")
 @SessionAttributes("user")
 public class MypageController {
-	
+	 
 	@Autowired
 	private UserService us;
-
+	
+	@Autowired
+	private OrderService orderService;
+	
 	@RequestMapping(value = "/mypage", method = RequestMethod.GET)
 	public String main(Locale locale, Model model) {
 		return "/mypage/mypage";
@@ -90,9 +97,14 @@ public class MypageController {
 	}
 	
 	// 주문내역
-	@GetMapping("/mypage/orderlist")
-	public String orderList() throws Exception {
-
+	@GetMapping("orderlist")
+	public String orderList(HttpSession session, Model model,OrderDetailVO orderDetailVO) throws Exception {	
+		String users_id=(String) session.getAttribute("user");
+		System.out.println("session id : " + users_id); // 아이디 확인용
+		List<OrderDetailVO> orderList = orderService.listOrder(users_id);
+		
+		model.addAttribute("orderList", orderList);
+		
 		return "/mypage/orderlist";
 	}
 }

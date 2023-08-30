@@ -23,6 +23,7 @@ public class OrderDetailVO {
 	private char refund_yn;
 	
 	private List<ProductImgVO> imgList;
+	private OrderVO orderVO;
 
 	public int[] getInorder_detail_num() {
 		return Inorder_detail_num;
@@ -143,6 +144,14 @@ public class OrderDetailVO {
 	public void setImgList(List<ProductImgVO> imgList) {
 		this.imgList = imgList;
 	}
+	
+	public OrderVO getOrderVO() {
+		return orderVO;
+	}
+
+	public void setOrderVO(OrderVO orderVO) {
+		this.orderVO = orderVO;
+	}
 
 	@Override
 	public String toString() {
@@ -153,7 +162,7 @@ public class OrderDetailVO {
 				+ ", Inrefund_yn=" + Arrays.toString(Inrefund_yn) + ", order_detail_num=" + order_detail_num
 				+ ", order_num=" + order_num + ", product_num=" + product_num + ", product_name=" + product_name
 				+ ", product_count=" + product_count + ", product_price=" + product_price + ", refund_yn=" + refund_yn
-				+ ", imgList=" + imgList + "]";
+				+ ", imgList=" + imgList + ", orderVO=" + orderVO + "]";
 	}
 	
 	

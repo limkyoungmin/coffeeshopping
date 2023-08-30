@@ -9,3 +9,14 @@ WHERE a.users_id = 'test'
 ORDER BY b.order_detail_num DESC
 
 b.order_detail_num 을 날짜별로 출력 하려면 초단위까지 계산해야됨
+
+
+배송현황(요청포함)
+alter table orders add order_request CHAR(1);
+추가함
+1 = 주문완료
+2 = 배송준비중
+3 = 배송중
+4 = 배송완료
+5 = 구매확정
+6 = 취소/교환/반품

@@ -12,5 +12,6 @@ public interface OrderService {
 	
 	//public void insertOrder(OrderVO orderVO,OrderDetailVO orderdetailVO) throws Exception;
 	public void insertOrder(OrderVO orderVO, List<OrderDetailVO> orderDetailVOList) throws Exception;
+	public List<OrderDetailVO> listOrder(String users_id) throws Exception;
 	
 }

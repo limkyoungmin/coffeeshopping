@@ -75,6 +75,9 @@ public class AdminController {
 		System.out.println("입력한 admin id : " + adminVo.getAdmin_id());
 		System.out.println("입력한 admin pwd : " + adminVo.getAdmin_passwd());
 		
+		System.out.println("vo.id : " + vo.getAdmin_id());
+		System.out.println("vo.pwd : " + vo.getAdmin_passwd());
+		
 		if (vo == null || !adminVo.getAdmin_passwd().equals(vo.getAdmin_passwd())) {
 			
 			return "redirect:/admin/login";

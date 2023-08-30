@@ -39,5 +39,9 @@ public class OrderServiceImpl implements OrderService {
 		Random random = new Random();
 		return random.nextInt(900000) + 100000; // Generates a 6-digit random number
 	}
-
+	
+	@Override
+	public List<OrderDetailVO> listOrder(String users_id) throws Exception {
+		return dao.listOrder(users_id);
+	}
 }
