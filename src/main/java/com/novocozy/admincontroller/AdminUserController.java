@@ -8,11 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.novocozy.domain.OrderDetailVO;
+import com.novocozy.domain.OrderVO;
 import com.novocozy.domain.UserVO;
 import com.novocozy.service.AdminUserService;
 import com.novocozy.service.OrderService;
@@ -51,12 +54,32 @@ public class AdminUserController {
 	
 	// 관리자 유저 배송관련 페이지
 	@GetMapping("admin/users_delivery")
-	public String userDeliveryList(HttpSession session, Model model,OrderDetailVO orderDetailVO) throws Exception {	
-		String users_id=(String) session.getAttribute("user");
-		System.out.println("session id : " + users_id); // 아이디 확인용
-		List<OrderDetailVO> orderList = orderService.listOrder(users_id);
+	public String userDeliveryList(HttpSession session, Model model,OrderVO orderVo) throws Exception {	
 		
-		model.addAttribute("orderList", orderList);
+		List<OrderVO> adminOrderList = userService.adminOrderList(orderVo);
+		
+		model.addAttribute("orderList", adminOrderList);
 		return "admin/users_delivery";
+	}
+	
+	// 관리자 유저 배송 업데이트
+	@PostMapping("admin/userDeliveryUpdate")
+	public String userDeliveryUpdate(@ModelAttribute OrderVO orderVo) throws Exception {
+		int order_num = orderVo.getOrder_num();
+		String order_request = orderVo.getOrder_request();
+		String order_courier = orderVo.getOrder_courier();
+		String order_trackingnum = orderVo.getOrder_trackingnum();
+		
+		System.out.println("order_num : " + order_num);	
+		System.out.println("order_request : " + order_request);
+		System.out.println("order_courier : " + order_courier);
+		System.out.println("order_trackingnum : " + order_trackingnum);
+		
+		if("배송완료".equals(order_request)) {
+			return "redirect:/admin/users_delivery";
+		}
+		userService.adminOrderUpdate(order_num, order_request, order_courier, order_trackingnum);
+		
+		return "redirect:/admin/users_delivery";
 	}
 }

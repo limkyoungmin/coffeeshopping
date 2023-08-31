@@ -29,6 +29,39 @@ $(document).ready(function() {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const updateButtons = document.querySelectorAll(".update-btn");
+    
+    updateButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            const orderRequest = button.getAttribute("data-order-request");
+            let alertMessage = "";
+            
+            if (orderRequest === "배송완료") {
+                alert("이미 배송완료 상태입니다.");
+                return; // 업데이트 중단
+            }
+            
+            switch (orderRequest) {
+                case "주문완료":
+                    alertMessage = "주문 업데이트가 되어 배송준비중으로 변경되었습니다.";
+                    break;
+                case "배송준비중":
+                    alertMessage = "배송중으로 변경되었습니다.";
+                    break;
+                case "배송중":
+                    alertMessage = "배송완료로 변경되었습니다.";
+                    break;
+                // 이 외의 경우에는 아무 작업도 하지 않음
+            }
+
+            if (alertMessage) {
+                alert(alertMessage);
+            }
+        });
+    });
+});
+
 </script>
 </head>
 <body>
@@ -45,36 +78,68 @@ $(document).ready(function() {
 						<div class="col-10">
 							<h3 class="text-muted text-center mb-2">회원 배송 리스트</h3>
 							<!-- memberTable -->
+							
+							
 							<table class="table text-center" id="memberTable">
 								<thead>
 									<tr class="text-white bg-dark">
+										<th class="col-2">주문날짜</th>
 										<th class="col-2">ID</th>
-										<th class="col-1">이름</th>
-										<th class="col-3">이메일</th>
-										<th class="col-3">주문번호</th>
-										<th class="col-3">배송현황</th>
+										<th class="col-2">이름</th>
+										<th class="col-2">주문번호</th>
+										<th class="col-2">배송현황</th>
+										<th class="col-2">업데이트</th>
 									</tr>
 								</thead>
 								<tbody>
-									<!-- 
-									<c:forEach var="adminUserList" items="${adminUserList}">
+									<c:forEach var="orderList" items="${orderList}">
+									<form action="userDeliveryUpdate" method="post">
+										<input type="hidden" name="order_num" value="${orderList.order_num}">
+										<input type="hidden" name="order_request" value="${orderList.order_request}">
+										<c:if test="${not empty orderList.order_courier}">
+											<input type="hidden" name="order_courier" value="${orderList.order_courier}">
+											<input type="hidden" name="order_trackingnum" value="${orderList.order_trackingnum}">
+										</c:if>
 											<tr class="table-ho">
-												<td data-users-id="${adminUserList.users_id}">11</td> 
-												<td>11</td>
-												<td>11</td>
-												<td>11</td>
-												<td>11</td>
-												<td>11</td>
-												<td>
-													<button type="button" class="btn btn-danger btn-delete" data-toggle="modal" data-target="#user_delete" data-users-id="${adminUserList.users_id}">처리</button>
-												</td>
+												<td rowspan="3" style="text-align:center; vertical-align: middle;">${orderList.order_date}</td>
+												<td rowspan="3" style="text-align:center; vertical-align: middle;" data-users-id="${orderList.users_id}">${orderList.users_id}</td> 
+												<td rowspan="3" style="text-align:center; vertical-align: middle;">${orderList.order_name}</td>
+												<td rowspan="3" style="text-align:center; vertical-align: middle;">${orderList.order_num}</td>
+												<td style="text-align:center; vertical-align: middle;">${orderList.order_request}</td>
+												<td rowspan="3" style="text-align:center; vertical-align: middle;"><input type="submit" value="업데이트" class="update-btn"  data-order-request="${orderList.order_request}"></td>
 											</tr>
+											<c:choose>
+												<c:when test="${empty orderList.order_courier}">
+													<tr class="table-ho">
+														<td style="text-align:center; vertical-align: middle;">
+															<select name="order_courier" class="form-control">
+															  <option value="" style="text-align:center;">택배사 선택</option>
+															  <option value="CJ대한통운" style="text-align:center;">CJ대한통운</option>
+															  <option value="우체국" style="text-align:center;">우체국</option>
+															  <option value="한진택배" style="text-align:center;">한진택배</option>
+															</select>
+														</td>
+													</tr>
+													<tr class="table-ho">
+														<td style="text-align:center; vertical-align: middle;"><input type="text" name="order_trackingnum" placeholder="송장번호를 입력하세요"></td>
+													</tr>
+												</c:when>
+												<c:otherwise>
+													<tr class="table-ho">
+														<td style="text-align:center; vertical-align: middle;">${orderList.order_courier}</td>
+													</tr>
+													<tr class="table-ho">
+														<td style="text-align:center; vertical-align: middle;">${orderList.order_trackingnum}</td>
+													</tr>
+												</c:otherwise>
+											</c:choose>
+											</form>
 									</c:forEach>
-									 -->
 								</tbody>
 							</table>
+							
 							<!-- end of memberTable -->
-							<!-- data-toggle="modal" data-target="#user_delete" -->
+							<!-- data-toggle="modal" data-target="#user_delete"
 							<div class="modal fade" id="user_delete">
 								<div class="modal-dialog">
 									<div class="modal-content">
@@ -95,7 +160,7 @@ $(document).ready(function() {
 										</div>
 									</div>
 								</div>
-							</div>
+							</div> -->
 							<!-- pagination -->
 							<nav>
 								<ul class="pagination justify-content-center">

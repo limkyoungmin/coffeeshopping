@@ -11,15 +11,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	ORDER BY users_date DESC
     </select>
 
-<update id="userDelete" parameterType="String">
-    UPDATE users
-    SET users_yn =
-        CASE
-            WHEN users_yn = 'N' THEN 'Y'
-            WHEN users_yn = 'Y' THEN 'N'
-        END
-    WHERE users_id = #{users_id}
-</update>
+	<update id="userDelete" parameterType="String">
+	    UPDATE users
+	    SET users_yn =
+	        CASE
+	            WHEN users_yn = 'N' THEN 'Y'
+	            WHEN users_yn = 'Y' THEN 'N'
+	        END
+	    WHERE users_id = #{users_id}
+	</update>
 
-
+	<!-- 유저 주문 리스트 -->
+	<select id="orderList" resultType="com.novocozy.domain.OrderVO">
+		SELECT * FROM orders
+		ORDER BY order_date DESC
+	</select>
+	
+	<!-- 유저 주문 업데이트 -->
+	<update id="orderUpdate" parameterType="java.util.Map">
+		UPDATE orders
+		SET order_request = '배송준비중',
+			order_courier = #{order_courier},
+			order_trackingnum = #{order_trackingnum}
+		WHERE order_num = #{order_num}
+	</update>
+	
+	<!-- 유저 주문 업데이트(택배사 + 송장번호) -->
+		<update id="orderRequestUpdate" parameterType="int">
+		UPDATE orders
+		SET order_request =
+			CASE
+				WHEN order_request = '배송준비중' THEN '배송중'
+				WHEN order_request = '배송중' THEN '배송완료'
+			END
+		WHERE order_num = #{order_num}
+	</update>
 </mapper>

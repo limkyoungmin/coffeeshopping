@@ -16,7 +16,9 @@ public class OrderVO {
 	private String order_buyer_name;//주문자 이름
 	private String order_buyer_phone;//주문자 핸드폰번호
 	private String order_buyer_email;//주문자 이메일
-	private String order_request;
+	private String order_request; // 배송현황
+	private String order_courier; // 택배사
+	private String order_trackingnum; // 송장번호
 	
 	private OrderDetailVO orderDetailVO;
 	private List<ProductImgVO> imgList;
@@ -111,6 +113,18 @@ public class OrderVO {
 	}
 	public void setOrder_request(String order_request) {
 		this.order_request = order_request;
+	}
+	public String getOrder_courier() {
+		return order_courier;
+	}
+	public void setOrder_courier(String order_courier) {
+		this.order_courier = order_courier;
+	}
+	public String getOrder_trackingnum() {
+		return order_trackingnum;
+	}
+	public void setOrder_trackingnum(String order_trackingnum) {
+		this.order_trackingnum = order_trackingnum;
 	}
 	@Override
 	public String toString() {
