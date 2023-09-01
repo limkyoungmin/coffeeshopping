@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/novocozy2.css' />">
 <link rel="stylesheet" type="text/css" href="<c:url value='/css/novocozy3.css' />">
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-<script type="text/javascript" src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="<c:url value='/js/common.js' />"></script>
 <script type="text/javascript" src="<c:url value='/js/swiper.js' />"></script>
 <title>NOVOCOZY</title>

@@ -54,55 +54,7 @@
 		$loginForm.submit();
 	}
 
-</script>
-<div id="wrap" class="subWrap mypageWrap">
-    <!-- 내용 -->
-		<div class="contents incCat">
-			<!-- 공통::상단 -->
-			<div class="userInfo">
-				<div class="innerInfo">
-					<div class="innerBox info">
-						<strong class="infoTop "> 
-						<a href="EditInfo.jsp">
-							<span class="userId">회원</span>님, 반갑습니다.
-						</a>
-						</strong>
-						<div class="infoBot">
-							<div class="set grade">
-								<em class="title">등급</em> <span class="value">BRONZE</span> 
-								<a href="/event/memberBenefit" class="btnBenefit">등급별 혜택보기</a>
-							</div>
-							<div class="set point">
-								<em class="title">적립금</em> <a href="#" class="value"> 0원 </a>
-							</div>
-						</div>
-					</div>
-					<div class="innerBox coupon">
-						<a href="#" class="iconS"> 쿠폰 <em class="number">0장</em></a>
-					</div>
-					<div class="innerBox order">
-						<a href="OrderList.jsp" class="iconS"> 주문/배송 <em class="number">0건</em></a>
-					</div>
-					<div class="innerBox qna">
-						<a href="MypageQna.jspt" class="iconS"> 1:1문의 <em class="number">0건</em></a>
-					</div>
-				</div>
-			</div>
-			<!-- //공통::상단 -->
-			<div class="mypageCol">
-				<div class="userMenu togType2">
-					<strong class="menuTit"><a href="Mypage.jsp">마이페이지</a></strong>
-					<ul class="depth1">
-						<li class=""><a href="/mypage/orderlist">주문/배송내역</a></li>
-						<li class=""><a href="ReturnList.jsp">반품/교환내역</a></li>
-						<li class=""><a href="AddressMg.jsp">배송지 관리</a></li>
-						<li class=""><a href="#">적립금 내역</a></li>
-						<li class=""><a href="MyWrite.jsp">작성한 글</a></li>
-						<li class=""><a href="/mypage/editinfo">개인정보 수정</a></li>
-					</ul>
-				</div>
-				<!-- 컨텐츠 -->
-				
+</script>				
 <script type="text/javascript">
     $(function() {
         $(".popWrap").on("click", ".popClose", function(e) {
@@ -260,7 +212,41 @@ function addQna() {
 	alert(categoryNo);
 }
 </script>
+<script>
+    // 페이지 로드 후 실행될 초기화 함수
+    document.addEventListener("DOMContentLoaded", function() {
+        var openPopupButtons = document.querySelectorAll(".open-popup");
 
+        openPopupButtons.forEach(function(button) {
+            button.addEventListener("click", function() {
+                var productNum = button.getAttribute("data-product-num");
+                openPopup(productNum);
+            });
+        });
+
+        function openPopup(productNum) {
+            var popup = document.getElementById("popChange");
+            popup.style.display = "block";
+
+            // 팝업 내용을 동적으로 채우는 코드 작성
+            // 예: 상품 정보를 가져와서 해당 위치에 채우는 등의 작업
+            var productInfo = getProductInfo(productNum);
+            // 예시로 제목 영역에 상품명을 채우는 코드
+            var titleElement = popup.querySelector(".title a");
+            titleElement.textContent = productInfo.productName;
+        }
+
+        function getProductInfo(productNum) {
+            // 서버에서 상품 정보를 가져오는 AJAX 호출 또는 데이터 처리 로직
+            // 이 예시에서는 가상의 정보를 반환하도록 했습니다.
+            return {
+                productName: "모카포트&더치",
+                // ... 다른 필요한 정보 ...
+            };
+        }
+    });
+</script>
+<%@include file="mypagetemplate.jsp"%>
 <div class="userCont">
     <!-- 주문/배송 내역 -->
     <div class="contBox history">
@@ -323,7 +309,9 @@ function addQna() {
 				            <td style="width:100px; height: 100px; text-align:center;"><a href="/productmaindetail?product_num=${orderList.product_num}"><img src="${orderList.imgList[0].img_url}" ></a></td>
 				            <td style="text-align:center;">${orderList.product_name}</td>
 				            <td style="text-align:center;">${orderList.product_price}</td>
-				            <td style="text-align:center;">교환신청</button></td>
+							<td style="text-align:center;">
+							    <a href="javascript:void(0);" class="open-popup" data-product-num="${orderList.product_num}">교환신청</a>
+							</td>
 			            </tr>
 		            </c:forEach>
 			        </tbody>
@@ -336,7 +324,7 @@ function addQna() {
 <!-- // 팝업::반품신청 -->
 
 <!-- 팝업::교환신청 -->
-<div id="popChange" class="popWrap popQna popReturn">
+<div id="popChange" class="popWrap popQna popReturn" style="display: none;">
     <div class="popInner">
         <div class="popBox">
             <h5 class="popHeader">교환신청</h5>
@@ -402,42 +390,6 @@ function addQna() {
                             <span class="maxlength"><em id="questionLength">0</em> / 1,000</span>
                         </div>
                         <!-- //내용 -->
-                        <!-- 사진첨부 -->
-                        <div class="qnaSection">
-                            <strong class="qnaTtl">사진 첨부하기</strong>
-                            <ul class="photoList">                                
-                                <li class="photoBox" id="photoBox1">
-                                    <input type="file" id="photoImg1" name="inputFiles" data-id="1" class="blind" accept="image/*" onchange="imageChage(1);">
-                                    <label onclick="javascript:imageUpload(1);">
-                                        <span class="blind addPhoto">사진 추가하기</span>
-                                    </label>
-                                </li>
-                                <li class="photoBox" id="photoBox2">
-                                    <input type="file" id="photoImg2" name="inputFiles" data-id="2" class="blind" accept="image/*" onchange="imageChage(2);">
-                                    <label onclick="javascript:imageUpload(2);">
-                                        <span class="blind addPhoto">사진 추가하기</span>
-                                    </label>
-                                </li>
-                                <li class="photoBox" id="photoBox3">
-                                    <input type="file" id="photoImg3" name="inputFiles" data-id="3" class="blind" accept="image/*" onchange="imageChage(3);">
-                                    <label onclick="javascript:imageUpload(3);">
-                                        <span class="blind addPhoto">사진 추가하기</span>
-                                    </label>
-                                </li>
-                                <li class="photoBox" id="photoBox4">
-                                    <input type="file" id="photoImg4" name="inputFiles" data-id="4" class="blind" accept="image/*" onchange="imageChage(4);">
-                                    <label onclick="javascript:imageUpload(4);">
-                                        <span class="blind addPhoto">사진 추가하기</span>
-                                    </label>
-                                </li>
-                            </ul>
-                            <div class="guideArea">
-                                <ul class="guideList">
-                                    <li>사진(이미지파일:jpg, gif, png)은 5Mb이하 최대 4개까지 등록 가능하며 사진 미첨부시 반품, 교환, 환불이 원활 하지 않을 수 있습니다.</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <!-- //사진첨부 -->
                         <!-- 회수지 정보 -->
                         <div class="infoBox">
                             <strong class="ttl">회수지 정보</strong>
